@@ -26,10 +26,10 @@ public class JobController {
     public String index(Model model, int id) {
 
         // TODO #1 - get the Job with the given ID and pass it into the view
-        Job job = jobData.findById(id);
-        model.addAttribute("job", job);
-        //or
-        //model.addAttribute("jobs",jobData.findById(id));
+        //Job job = jobData.findById(id);
+        //model.addAttribute("job", job);
+        //or ?
+        model.addAttribute("jobs",jobData.findById(id));
 
         //Job jobId = jobData.findById(17);
         //ArrayList<Job> allOfTheJobs = jobData.findAll();
@@ -48,21 +48,27 @@ public class JobController {
         // TODO #6 - Validate the JobForm model, and if valid, create a
         // new Job and add it to the jobData data store. Then
         // redirect to the job detail view for the new Job.
-        if (errors.hasErrors()){
-            model.addAttribute(jobForm);
-            return "new-job";
-        }
-        String aName = jobForm.getName();
-        Employer aEmployer = jobData.getEmployers().findById(jobForm.getEmployerId());
-        Location aLocation = jobData.getLocations().findById(jobForm.getLocationId());
-        CoreCompetency aSkill = jobData.getCoreCompetencies().findById(jobForm.getCoreCompetencyId());
-        PositionType aPositionType = jobData.getPositionTypes().findById(jobForm.getPositionTypeId());
 
-        Job newJob = new Job(aName, aEmployer, aLocation, aPositionType, aSkill);
-        jobData.add (newJob);
-        model.addAttribute("jobs", newJob);
-        //return "redirect ";
-        return "";
+
+        if (errors.hasErrors()){
+            //model.addAttribute(jobForm);
+            return "new-job";
+
+        }
+        else{
+            String aName = jobForm.getName();
+            Employer aEmployer = jobData.getEmployers().findById(jobForm.getEmployerId());
+            Location aLocation = jobData.getLocations().findById(jobForm.getLocationId());
+            CoreCompetency aSkill = jobData.getCoreCompetencies().findById(jobForm.getCoreCompetencyId());
+            PositionType aPositionType = jobData.getPositionTypes().findById(jobForm.getPositionTypeId());
+
+            Job newJob = new Job(aName, aEmployer, aLocation, aPositionType, aSkill);
+            jobData.add (newJob);
+            model.addAttribute("jobs", newJob);
+
+            return "redirect:/job/?id=" + newJob.getId();
+
+        }
 
     }
 }
